@@ -20,5 +20,15 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+++++++++++++++++++
+
+## 附：
+
+端口8082
+
+springboot端口8081
+
+
+
