@@ -1,6 +1,11 @@
 const { defineConfig } = require('@vue/cli-service')
 const path = require('path')
 module.exports = defineConfig({
+  publicPath: './',
+  outputDir: 'vue_login',
+  assetsDir: './static',
+  filenameHashing:true,
+  productionSourceMap: false,
   transpileDependencies: true,
   lintOnSave: false,
   devServer: {

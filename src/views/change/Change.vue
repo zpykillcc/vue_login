@@ -1,7 +1,7 @@
 <template>
     <div>
       <el-card class="box-card">
-        <h2>注册</h2>
+        <h2>更改密码</h2>
         <el-form
           :model="ruleForm"
           status-icon
@@ -14,14 +14,21 @@
           <el-form-item label="用户名" prop="uname">
             <el-input v-model="ruleForm.uname"></el-input>
           </el-form-item>
-          <el-form-item label="密码" prop="pass">
+          <el-form-item label="旧密码" prop="oldpass">
+            <el-input
+              type="password"
+              v-model="ruleForm.oldpass"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="新密码" prop="pass">
             <el-input
               type="password"
               v-model="ruleForm.pass"
               autocomplete="off"
             ></el-input>
           </el-form-item>
-          <el-form-item label="确认密码" prop="password">
+          <el-form-item label="重复密码" prop="password">
             <el-input
               type="password"
               v-model="ruleForm.password"
@@ -34,7 +41,6 @@
             >提交</el-button
           >
           <el-button @click="resetForm('ruleForm')">重置</el-button>
-          <el-button @click="goBack">返回</el-button>
         </div>
       </el-card>
     </div>
@@ -65,6 +71,7 @@
       return {
         ruleForm: {
           uname: "",
+          oldpass: "",
           pass: "",
           password: "",
         },
@@ -72,6 +79,7 @@
           uname: [
             { required: true, message: "用户名不能为空！", trigger: "blur" },
           ],
+          oldpass: [{ required: true, validator: validatePass, trigger: "blur" }],
           pass: [{ required: true, validator: validatePass, trigger: "blur" }],
           password: [
             { required: true, validator: validatePass2, trigger: "blur" },
@@ -87,16 +95,16 @@
           if (valid) {
             let _this = this;
             this.axios({     // axios 向后端发起请求
-              url: "/api/user/register",  // 请求地址
+              url: "/api/user/change",  // 请求地址
               method: "post",             // 请求方法
               processData:false,
               headers: {                  // 请求头
                 "Content-Type": "application/json",
               },
-              data: { 
+              params: { 
                 uname: _this.ruleForm.uname,
+                oldpass: _this.ruleForm.oldpass,
                 password: _this.ruleForm.password,
-                avator: "default",
               },
             }).then((res) => { 
               if (res.data.code === '0') {  
@@ -104,12 +112,13 @@
                   message: res.data.msg,
                   type: "success",
                 });
-              }else{
-                this.$message({
-                  message: res.data.msg,
-                  type: "warning",
-                });
-              }
+              }else 
+                {
+                    this.$message({
+                    message: res.data.msg,
+                    type: "warning",
+                  });
+                } 
               
               _this.loading = false;
               console.log(res);
@@ -123,9 +132,6 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
-      },
-      goBack() {
-        this.$router.go(-1);
       },
     },
   };
